@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Phasmophobia Гайд</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        .nav-panel {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: #1a1a1a;
+            padding: 1rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+        }
+
+        .nav-link {
+            color: #fff;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+
+        .nav-link:hover {
+            background: #00ff00;
+            color: #1a1a1a;
+        }
+
+        .nav-link.active {
+            background: #00ff00;
+            color: #1a1a1a;
+        }
+
+        .content {
+            margin-top: 32px;
+            padding: 2rem;
+        }
+
+        /* Обновляем стили для контейнера */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+
+        .titlebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 32px;
+            width: 100%;
+            background: #1a1a1a;
+            -webkit-app-region: drag; /* Позволяет перетаскивать окно */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 1rem;
+            z-index: 9999;
+        }
+
+        .titlebar-title {
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .titlebar-buttons {
+            -webkit-app-region: no-drag;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .titlebar-button {
+            width: 46px;
+            height: 32px;
+            border: none;
+            background: none;
+            color: #888;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            font-family: "Segoe MDL2 Assets";
+            font-size: 10px;
+        }
+
+        .titlebar-button:hover {
+            background: #333333;
+        }
+
+        .titlebar-button.close:hover {
+            background: #E81123;
+            color: #fff;
+        }
+
+        /* Сдвигаем весь контент вниз */
+        .content {
+            margin-top: 112px; /* 32px для тайтлбара + 80px для навигации */
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 0.5rem;
+            background: #1a1a1a;
+            color: #666;
+            font-size: 0.8rem;
+            text-align: center;
+            z-index: 9999;
+        }
+
+        .footer span {
+            margin: 0 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="titlebar">
+        <div class="titlebar-title">Phasmophobia Гайд</div>
+        <div class="titlebar-buttons">
+            <button class="titlebar-button minimize" onclick="minimizeWindow()">&#xE921;</button>
+            <button class="titlebar-button maximize" onclick="maximizeWindow()">&#xE922;</button>
+            <button class="titlebar-button close" onclick="closeWindow()">&#xE8BB;</button>
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="container">
+            <h1>Phasmophobia Гайд</h1>
+            <div class="menu-cards">
+                <div class="card" onclick="window.location.href='pages/ghosts.html'">
+                    <h2>Призраки</h2>
+                    <p>Все типы призраков и их особенности</p>
+                </div>
+                <div class="card" onclick="window.location.href='pages/evidence.html'">
+                    <h2>Улики</h2>
+                    <p>Виды улик и как их искать</p>
+                </div>
+                <div class="card" onclick="window.location.href='pages/items.html'">
+                    <h2>Предметы</h2>
+                    <p>Снаряжение и его применение</p>
+                </div>
+                <div class="card" onclick="window.location.href='pages/phrases.html'">
+                    <h2>Фразы</h2>
+                    <p>Голосовые команды для общения с призраками</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <span>author: thevo1dest</span>
+        <span>•</span>
+        <span>version: 1.0.0</span>
+    </div>
+
+    <script>
+        function minimizeWindow() {
+            window.electronAPI.minimize();
+        }
+
+        function maximizeWindow() {
+            window.electronAPI.maximize();
+        }
+
+        function closeWindow() {
+            window.electronAPI.close();
+        }
+    </script>
+</body>
+</html> 

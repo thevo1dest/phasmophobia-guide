@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Улики - Phasmophobia Гайд</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        /* ... существующие стили ... */
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 0.5rem;
+            background: #1a1a1a;
+            color: #666;
+            font-size: 0.8rem;
+            text-align: center;
+            z-index: 9999;
+        }
+
+        .footer span {
+            margin: 0 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="../index.html" class="back-button">← Назад</a>
+            <h1>Улики</h1>
+        </div>
+        <div class="menu-cards">
+            <div class="card evidence-type" data-evidence="emf">
+                <h2>ЭМП 5</h2>
+                <p>Электромагнитное поле максимального уровня</p>
+            </div>
+            <div class="card evidence-type" data-evidence="orbs">
+                <h2>Призрачный огонёк</h2>
+                <p>Белый шарик, видимый через камеру ночного видения</p>
+            </div>
+            <div class="card evidence-type" data-evidence="fingerprints">
+                <h2>Отпечатки</h2>
+                <p>Следы взаимодействия призрака с окружением</p>
+            </div>
+            <div class="card evidence-type" data-evidence="spirit-box">
+                <h2>Радиоприёмник</h2>
+                <p>Позволяет общаться с призраком голосом</p>
+            </div>
+            <div class="card evidence-type" data-evidence="writing">
+                <h2>Записи в блокноте</h2>
+                <p>Призрак может писать или рисовать в блокноте</p>
+            </div>
+            <div class="card evidence-type" data-evidence="dots">
+                <h2>Лазерный проектор</h2>
+                <p>Показывает силуэт проходящего призрака</p>
+            </div>
+            <div class="card evidence-type" data-evidence="freezing">
+                <h2>Минусовая температура</h2>
+                <p>Температура ниже нуля в комнате призрака</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно -->
+    <div class="modal" id="evidenceModal">
+        <div class="modal-content">
+            <button class="close-modal">&times;</button>
+            <div id="modalData"></div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <span>author: thevo1dest</span>
+        <span>•</span>
+        <span>version: 1.0.0</span>
+    </div>
+
+    <div class="window-controls">
+        <button class="window-button minimize" onclick="window.electronAPI.minimize()">&#xE921;</button>
+        <button class="window-button maximize" onclick="window.electronAPI.maximize()">&#xE922;</button>
+        <button class="window-button close" onclick="window.electronAPI.close()">&#xE8BB;</button>
+    </div>
+
+    <script>
+        const evidenceData = {
+            emf: {
+                name: 'ЭМП 5',
+                description: 'Электромагнитное поле максимального уровня',
+                details: [
+                    'След от действий призрака, определяемый детектором ЭМП',
+                    'Обычные действия дают 2-4 огонька (не улика)',
+                    'Уликой считаются только 5 огоньков на детекторе',
+                    'При наличии улики шанс 25% на ЭМП 5 при любом взаимодействии',
+                    'Может появиться при общении с доской Уиджи (шанс 25%)'
+                ],
+                howToFind: [
+                    'Используйте детектор ЭМП в местах активности призрака',
+                    'Проверяйте после взаимодействий с дверями и предметами',
+                    'Отмечайте улику только при появлении всех 5 огоньков'
+                ]
+            },
+            orbs: {
+                name: 'Призрачный огонёк',
+                description: 'Белый шарик, видимый через камеру ночного видения',
+                details: [
+                    'Виден только через камеру в режиме ночного видения',
+                    'Выглядит как маленький белый шарик',
+                    'Является обязательной 4-й уликой для Мимика',
+                    'Лучше видно при выключенном свете',
+                    'Может появляться в необычных местах (стеллажи, окна машины)'
+                ],
+                howToFind: [
+                    'Используйте видеокамеру в режиме ночного видения',
+                    'Можно смотреть через камеру в руках или через монитор в фургоне',
+                    'Не путайте со снежинками - огонек летает снизу вверх'
+                ]
+            },
+            fingerprints: {
+                name: 'Отпечатки',
+                description: 'Следы взаимодействия призрака с окружением',
+                details: [
+                    '100% шанс появления при наличии улики (кроме Обакэ)',
+                    'Обакэ оставляет уникальные шестипалые отпечатки',
+                    'Является обязательной уликой для Обакэ',
+                    'Обакэ может не оставить отпечаток с шансом 30%'
+                ],
+                howToFind: [
+                    'Используйте УФ фонарик после взаимодействий призрака',
+                    'Проверяйте двери, окна, выключатели',
+                    'При подозрении на Обакэ проверьте 3-4 раза'
+                ]
+            },
+            'spirit-box': {
+                name: 'Радиоприёмник',
+                description: 'Позволяет общаться с призраком голосом',
+                details: [
+                    'Требуется находиться в темноте',
+                    'Радиоприёмник должен быть в 3 метрах от призрака',
+                    'При ответе на приёмнике загорается иконка призрака',
+                    'Является обязательной уликой для Мороя',
+                    'Деоген имеет уникальный ответ с тяжелым дыханием'
+                ],
+                howToFind: [
+                    'Спрашивайте "Ты молодой/старый?" или "Ты близко/далеко?"',
+                    'Убедитесь, что находитесь в темноте',
+                    'Крестик показывает, что вас слышно'
+                ]
+            },
+            writing: {
+                name: 'Записи в блокноте',
+                description: 'Призрак может писать или рисовать в блокноте',
+                details: [
+                    'Блокнот нужно положить кнопкой F, не бросать',
+                    'При наличии улики блокнот поднимется и в нем появится запись',
+                    'Если призрак толкнул блокнот без записи - улики нет',
+                    'Можно получить сигнал ЭМП при написании'
+                ],
+                howToFind: [
+                    'Положите раскрытый блокнот в комнате призрака',
+                    'Дождитесь взаимодействия',
+                    'Можно сфотографировать записи или момент написания'
+                ]
+            },
+            dots: {
+                name: 'Лазерный проектор',
+                description: 'Показывает силуэт проходящего призрака',
+                details: [
+                    'Показывает еле видимый силуэт призрака',
+                    'Лучше видно через камеру в темноте',
+                    'Проекцию Горё видно только через камеру',
+                    'Является обязательной уликой для Горё'
+                ],
+                howToFind: [
+                    'Поставьте проектор кнопкой F в центре комнаты',
+                    'Можно ставить на пол, стены, предметы или потолок',
+                    'Размещайте в местах частого взаимодействия призрака'
+                ]
+            },
+            freezing: {
+                name: 'Минусовая температура',
+                description: 'Температура ниже нуля в комнате призрака',
+                details: [
+                    'При температуре ниже 5° виден пар изо рта',
+                    'Уликой считается только температура ниже 0°',
+                    'Является обязательной уликой для Ханту',
+                    'Призрак может охлаждать соседние комнаты'
+                ],
+                howToFind: [
+                    'Следите за появлением пара изо рта',
+                    'Используйте термометр для точного измерения',
+                    'Проверяйте соседние комнаты при температуре 6-8°'
+                ]
+            }
+        };
+
+        const modal = document.getElementById('evidenceModal');
+        const modalData = document.getElementById('modalData');
+        const cards = document.querySelectorAll('.evidence-type');
+
+        cards.forEach(card => {
+            card.addEventListener('click', () => {
+                const evidence = evidenceData[card.dataset.evidence];
+                if (evidence) {
+                    modalData.innerHTML = `
+                        <h2>${evidence.name}</h2>
+                        <p class="evidence-description">${evidence.description}</p>
+                        <div class="modal-info">
+                            <div class="info-section">
+                                <h3>Особенности</h3>
+                                <ul>
+                                    ${evidence.details.map(d => `<li>${d}</li>`).join('')}
+                                </ul>
+                            </div>
+                            <div class="info-section">
+                                <h3>Как найти</h3>
+                                <ul>
+                                    ${evidence.howToFind.map(h => `<li>${h}</li>`).join('')}
+                                </ul>
+                            </div>
+                        </div>
+                    `;
+                    modal.classList.add('active');
+                }
+            });
+        });
+
+        // Закрытие модального окна
+        document.querySelector('.close-modal').addEventListener('click', () => {
+            modal.classList.remove('active');
+        });
+
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.classList.remove('active');
+            }
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal.classList.contains('active')) {
+                modal.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html> 

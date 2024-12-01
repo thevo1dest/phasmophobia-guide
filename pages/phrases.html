@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Фразы - Phasmophobia Гайд</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+
+        .phrases-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            height: calc(100vh - 150px);
+        }
+        
+        .phrase-category {
+            background: #2d2d2d;
+            border-radius: 10px;
+            padding: 1rem;
+            overflow-y: auto;
+        }
+        
+        .phrase-category h2 {
+            color: #00ff00;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #444;
+            position: sticky;
+            top: 0;
+            background: #2d2d2d;
+            z-index: 1;
+        }
+        
+        .phrase-category h3 {
+            color: #00ff00;
+            margin: 1rem 0 0.5rem;
+            font-size: 1rem;
+            opacity: 0.8;
+        }
+        
+        .phrase-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+        }
+        
+        .phrase-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.4rem 0.8rem;
+            background: #363636;
+            border-radius: 4px;
+        }
+        
+        .phrase-item:hover {
+            background: #404040;
+        }
+        
+        .phrase-rus {
+            color: #fff;
+            font-size: 0.95rem;
+        }
+        
+        .phrase-eng {
+            color: #888;
+            font-size: 0.85rem;
+            margin-left: 1rem;
+        }
+
+        /* Стилизация скроллбара */
+        .phrase-category::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .phrase-category::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .phrase-category::-webkit-scrollbar-thumb {
+            background: #444;
+            border-radius: 3px;
+        }
+
+        .phrase-category::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        /* Колонки для общих фраз и радио */
+        .col-left {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .col-right {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 0.5rem;
+            background: #1a1a1a;
+            color: #666;
+            font-size: 0.8rem;
+            text-align: center;
+            z-index: 9999;
+        }
+
+        .footer span {
+            margin: 0 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="../index.html" class="back-button">← Назад</a>
+            <h1>Фразы</h1>
+        </div>
+        <div class="phrases-grid">
+            <div class="col-left">
+                <div class="phrase-category">
+                    <h2>Общие вопросы</h2>
+                    <div class="phrase-list" id="commonPhrases"></div>
+                </div>
+                <div class="phrase-category">
+                    <h2>Радиоприёмник</h2>
+                    <div class="phrase-list" id="radioPhrases"></div>
+                </div>
+            </div>
+            <div class="col-right">
+                <div class="phrase-category">
+                    <h2>Повышение активности</h2>
+                    <div class="phrase-list" id="activityPhrases"></div>
+                </div>
+                <div class="phrase-category">
+                    <h2>Доска Уиджи</h2>
+                    <div class="phrase-list" id="ouijaPhrases"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <span>author: thevo1dest</span>
+        <span>•</span>
+        <span>version: 1.0.0</span>
+    </div>
+
+    <div class="window-controls">
+        <button class="window-button minimize" onclick="window.electronAPI.minimize()">&#xE921;</button>
+        <button class="window-button maximize" onclick="window.electronAPI.maximize()">&#xE922;</button>
+        <button class="window-button close" onclick="window.electronAPI.close()">&#xE8BB;</button>
+    </div>
+
+    <script>
+        const phrases = {
+            common: [
+                { eng: "What do you want?", rus: "Что тебе надо?" },
+                { eng: "Why are you here?", rus: "Почему ты здесь?" },
+                { eng: "Do you want to hurt us?", rus: "Ты хочешь нас убить?" },
+                { eng: "Are you angry?", rus: "Ты злишься?" },
+                { eng: "Do you want us here?", rus: "Хочешь чтобы мы остались?" },
+                { eng: "Shall we leave?", rus: "Давайте уйдём?" },
+                { eng: "Should we leave?", rus: "Может нам уйти?" },
+                { eng: "Do you want us to leave?", rus: "Хочешь чтобы мы ушли?" },
+                { eng: "What should we do?", rus: "Что нам делать?" },
+                { eng: "Can we help?", rus: "Тебе помочь?" },
+                { eng: "Are you friendly?", rus: "Ты друг?" },
+                { eng: "What are you?", rus: "Что ты такое?" },
+                { eng: "Where are you?", rus: "Где ты?" },
+                { eng: "Are you close?", rus: "Ты близко?" },
+                { eng: "Can you show yourself?", rus: "Показаться?" },
+                { eng: "Give us a sign?", rus: "Дай нам знак." },
+                { eng: "Let us know you are here?", rus: "Дай нам знать." },
+                { eng: "Show yourself?", rus: "Покажись." },
+                { eng: "Can you talk?", rus: "Скажи." },
+                { eng: "Speak to us", rus: "Поговори." },
+                { eng: "Are you here?", rus: "Ты здесь?" },
+                { eng: "Are you with us?", rus: "Ты с нами?" },
+                { eng: "Anybody with us?", rus: "Кто-нибудь здесь?" },
+                { eng: "Is anyone here?", rus: "Кто-нибудь есть?" },
+                { eng: "Anybody in the room?", rus: "Есть в комнате?" },
+                { eng: "Anybody here?", rus: "Кто здесь?" },
+                { eng: "Is there a spirit here?", rus: "Здесь кто-нибудь есть?" },
+                { eng: "Is there a Ghost here?", rus: "Здесь есть призрак?" },
+                { eng: "Are you a girl?", rus: "Ты девочка?" },
+                { eng: "Are you a boy?", rus: "Ты мальчик?" },
+                { eng: "Are you male?", rus: "Ты мужчина?" },
+                { eng: "Are you female?", rus: "Ты женщина?" },
+                { eng: "Who are you?", rus: "Кто ты?" },
+                { eng: "Who is this?", rus: "Кто это?" },
+                { eng: "Who are we talking to?", rus: "С кем мы разговариваем?" },
+                { eng: "Who am I talking to?", rus: "С кем я разговариваю?" },
+                { eng: "Hello", rus: "Привет." },
+                { eng: "What is your name?", rus: "Как тебя зовут?" },
+                { eng: "Can you give me your name?", rus: "Назови имя." },
+                { eng: "How old are you?", rus: "Сколько тебе лет?" },
+                { eng: "How young are you?", rus: "Ты молод?" },
+                { eng: "What is your age?", rus: "Сколько тебе?" },
+                { eng: "When were you born?", rus: "Когда ты родился?" },
+                { eng: "Are you a child?", rus: "Ты ребёнок?" },
+                { eng: "Are you old?", rus: "Ты старик?" },
+                { eng: "Are you young?", rus: "Ты молодой?" }
+            ],
+            radio: [
+                { eng: "Can you speak", rus: "Ты можешь говорить?" },
+                { eng: "Can you speak to us", rus: "Можешь поговорить?" },
+                { eng: "Make a noise", rus: "Пошуми." },
+                { eng: "Open a door", rus: "Открой дверь." },
+                { eng: "Open this door", rus: "Открой эту дверь." },
+                { eng: "Turn on the light", rus: "Включи свет." },
+                { eng: "Turn off the light", rus: "Выключи свет." },
+                { eng: "Are there any ghosts?", rus: "Есть ли здесь?" },
+                { eng: "Give us a sign", rus: "Дай нам знак." },
+                { eng: "Show us", rus: "Покажи нам." },
+                { eng: "Let us know you are here", rus: "Дай нам знать." },
+                { eng: "Do something", rus: "Сделай что-нибудь." },
+                { eng: "Is there anyone with me?", rus: "Здесь кто-то есть?" },
+                { eng: "Scream", rus: "Покричи." },
+                { eng: "Are you alone?", rus: "Тут один?" },
+                { eng: "Can we speak?", rus: "Можешь поговорить?" },
+                { eng: "Would like to speak to you?", rus: "С тобой поговорить?" },
+                { eng: "Is there anyone here?", rus: "Кто тут?" },
+                { eng: "May I ask you?", rus: "Задать вопрос?" },
+                { eng: "Would you like to talk?", rus: "Хочешь поговорить?" }
+            ],
+            activity: [
+                { eng: "I'm scared", rus: "Я боюсь." },
+                { eng: "I am scared", rus: "Мне страшно." },
+                { eng: "Scared", rus: "Страшно." },
+                { eng: "Scary", rus: "Стрём." },
+                { eng: "Spooky", rus: "Стрёмно" },
+                { eng: "Horror", rus: "Ужас." },
+                { eng: "Scare", rus: "Пугает." },
+                { eng: "Frighten", rus: "Пугать." },
+                { eng: "Panic", rus: "Паника." },
+                { eng: "Fright", rus: "Испуг." },
+                { eng: "Hide", rus: "Прячься." },
+                { eng: "Run", rus: "Беги." },
+                { eng: "Show your presence", rus: "Покажись." },
+                { eng: "Show us", rus: "Явись." },
+                { eng: "Show me", rus: "Покажи." }
+            ],
+            ouija: [
+                // Жертва
+                { eng: "Who did you kill?", rus: "Кого ты убил?" },
+                { eng: "Who is your victim?", rus: "Кто твоя жертва?" },
+                { eng: "What is the name of the person you killed?", rus: "Как имя твоей жертвы?" },
+                { eng: "What is the name of the person you murdered?", rus: "Как зовут твою жертву?" },
+                { eng: "What is your victim?", rus: "Твоя жертва?" },
+                { eng: "Did you murder?", rus: "Ты убийца?" },
+                { eng: "Who did you murder?", rus: "Кого ты убил?" },
+                { eng: "Who died?", rus: "Кто умер?" },
+                // Возраст
+                { eng: "How old are you?", rus: "Сколько тебе?" },
+                { eng: "What is your age?", rus: "Какого ты возраста?" },
+                { eng: "Are you old?", rus: "Ты стар?" },
+                { eng: "Are you young?", rus: "Ты молод?" },
+                // Смерть
+                { eng: "How long have you been dead?", rus: "Как давно ты?" },
+                { eng: "How many years ago did you die?", rus: "Сколько лет назад ты умер?" },
+                { eng: "How long have you been here?", rus: "��ак давно ты здесь?" },
+                { eng: "How long ago did you die?", rus: "Как давно ты умер?" },
+                { eng: "When did you die?", rus: "Когда ты умер?" },
+                // Комната
+                { eng: "How many are in this room?", rus: "Сколько в этой комнате?" },
+                { eng: "How many people are in this room?", rus: "Сколько здесь человек?" },
+                { eng: "How many people are here?", rus: "Сколько здесь людей?" },
+                { eng: "How many ghosts are in this room?", rus: "Сколько призраков?" },
+                { eng: "How many ghosts are here?", rus: "Сколько вас здесь?" },
+                // Локация
+                { eng: "Where are you?", rus: "Где ты?" },
+                { eng: "What is your favourite room?", rus: "Твоя любимая комната?" },
+                { eng: "Where is your room?", rus: "Твоя комната?" },
+                { eng: "What is your room?", rus: "Какая из комнат твоя?" },
+                { eng: "Are you here?", rus: "Ты здесь?" },
+                { eng: "Are you close?", rus: "Ты рядом?" },
+                { eng: "Are there any spirits?", rus: "Здесь есть духи?" },
+                { eng: "Are you near?", rus: "Ты рядом?" },
+                { eng: "Are you around?", rus: "Ты поблизости?" }
+            ]
+        };
+
+        function createPhraseElement(phrase) {
+            return `
+                <div class="phrase-item">
+                    <div class="phrase-rus">${phrase.rus}</div>
+                    <div class="phrase-eng">${phrase.eng}</div>
+                </div>
+            `;
+        }
+
+        // Заполняем списки фраз
+        document.getElementById('commonPhrases').innerHTML = 
+            phrases.common.map(createPhraseElement).join('');
+        
+        document.getElementById('radioPhrases').innerHTML = 
+            phrases.radio.map(createPhraseElement).join('');
+        
+        document.getElementById('activityPhrases').innerHTML = 
+            phrases.activity.map(createPhraseElement).join('');
+        
+        document.getElementById('ouijaPhrases').innerHTML = 
+            phrases.ouija.map(createPhraseElement).join('');
+    </script>
+</body>
+</html> 
